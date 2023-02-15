@@ -9,54 +9,29 @@ export default function GenerateRandomRut() {
   }
   
   function validateRandomRut(rut) {
-    let rutToValidate = rut;
-    let reverseRut = [];
-    rutToValidate = rutToValidate.toString();
-    rutToValidate = rutToValidate.split("");
-    for (let i = rutToValidate.length - 1; i >= 0; i--) {
-      reverseRut.push(rutToValidate[i]);
-    }
+    let reverseRut = [...rut.toString()].reverse();
     let multipliedRut = [];
     let j = 2;
     let lastIndex = reverseRut.lastIndexOf(reverseRut[reverseRut.length - 1]);
+    
     for (let i of reverseRut) {
-        console.log(i)
       if (lastIndex + 1 == reverseRut.lastIndexOf(i)) {
         break;
       }
-      for (j; j <= 7; j++) {
-        multipliedRut.push(i * j);
-        if (j == 7) {
-          j = 2;
-        } else {
-          j = j + 1;
-        }
-        break;
-      }
+      multipliedRut.push(i * j);
+      j = j == 7 ? 2 : j + 1;
     }
-    let sumateRut = 0
-    for(let i=0;i<multipliedRut.length;i++){
-      sumateRut += multipliedRut[i]
-    }
-    let newSumateRut = Math.floor(sumateRut/11)
-    newSumateRut = newSumateRut*11
-    sumateRut = sumateRut - newSumateRut;
-    if(sumateRut<0){
-      sumateRut = sumateRut*-1
-    }
-    let finalResult = 11-sumateRut
-    if(finalResult == 11){
-      finalResult = 0
-    }
-    if(finalResult == 10){
-      finalResult = 'k'
-    }
-    if(finalResult <= 11 || finalResult == 'k'){
-      elRut = `${rut}-${finalResult}`
-      console.log(elRut)
-      return true
-    }else{
-      return false
+    
+    let finalResult = 11 - multipliedRut.reduce((acc, curr) => acc + curr) % 11;
+    finalResult = finalResult == 11 ? 0 : finalResult == 10 ? 'k' : finalResult;
+    
+    if (finalResult <= 11 || finalResult == 'k') {
+      elRut = `${rut}-${finalResult}`;
+      console.log(elRut);
+      return true;
+    } else {
+      return false;
     }
   }
-let elRut = 0;
+  
+  let elRut = 0;
